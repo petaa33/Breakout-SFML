@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ball.cpp" />
+    <ClCompile Include="entityManager.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="paddle.cpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="ball.h" />
     <ClInclude Include="components.h" />
     <ClInclude Include="entity.h" />
+    <ClInclude Include="entityManager.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="paddle.h" />
   </ItemGroup>

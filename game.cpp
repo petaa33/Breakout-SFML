@@ -10,10 +10,19 @@ Game::Game() {
 
 	paddle = std::make_shared<Paddle>(playerStartPos);
 	ball = std::make_shared<Ball>(ballStartPos);
+
+	entityManager.add(paddle);
+	entityManager.add(ball);
+
+	clock = sf::Clock();
 }
 
 void Game::run() {
+	handleDeltaTime();
+	systemInput();
+	systemMovement();
 	systemRender();
+	entityManager.update();
 }
 
 void Game::systemRender() {
@@ -28,15 +37,17 @@ void Game::sytemCollison() {
 }
 
 void Game::systemMovement() {
-
+	for (auto& entity : entityManager.getRigidbodyEntities()) {
+		entity->sprite->move(entity->body->velocity * entity->body->speed * deltaTime);
+	}
 }
 
 void Game::systemInput() {
-
+	paddle->handleInput();
 }
 
 void Game::handleDeltaTime() {
-
+	deltaTime = clock.restart().asSeconds();
 }
 
 std::shared_ptr<Paddle> createPaddle() {

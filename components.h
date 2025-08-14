@@ -3,9 +3,10 @@
 
 class Rigidbody {
 public:
+	bool isEnabled = false;
 	sf::Vector2f velocity = sf::Vector2f(0,0);
 	float speed = 1;
 	bool applyGravity = false;
 
-	Rigidbody(float speed, float gravity) : speed(speed), applyGravity(applyGravity) {};
+	Rigidbody(bool isEnabled, float speed, float gravity) : isEnabled(isEnabled), speed(speed), applyGravity(applyGravity) {};
 };

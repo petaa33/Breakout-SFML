@@ -27,6 +27,9 @@
     <ClCompile Include="ball.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="entityManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -42,6 +45,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="ball.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="entityManager.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

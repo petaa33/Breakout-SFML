@@ -4,6 +4,7 @@
 
 class Entity {
 public:
+	bool isAlive = true;
 	std::string tag;
 	sf::Texture texture;
 	std::shared_ptr<sf::Sprite> sprite;
