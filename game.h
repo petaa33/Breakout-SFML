@@ -14,7 +14,10 @@ private:
 	void systemMovement();
 	void systemInput();
 	void systemRender();
+
+	void handleGamePhase();
 	void handleDeltaTime();
+	void handleCollisionBroadPhase();
 
 	EntityManager entityManager;
 	std::shared_ptr<Paddle> paddle;

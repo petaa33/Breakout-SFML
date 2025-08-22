@@ -25,3 +25,21 @@ const EntityVec& EntityManager::getRigidbodyEntities() {
 	return rigidbodyEntities;
 }
 
+const EntityVec& EntityManager::getBlocks() {
+	return blocks;
+}
+
+void EntityManager::createBlocks(int windowWidth, int windowHeight) {
+	int blockWidth = 128;
+	int blockHeight = 32;
+	int numOfBlocksX = windowWidth / blockWidth;
+	int numOfBlocksY = 5;
+
+	for (int i = 0; i < numOfBlocksX; i++) {
+		for (int j = 0; j < numOfBlocksY; j++) {
+			std::shared_ptr<Block> block = std::make_shared<Block>(sf::Vector2f(i * blockWidth, j * blockHeight));
+			blocks.push_back(block);
+		}
+	}
+}
+

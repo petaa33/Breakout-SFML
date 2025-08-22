@@ -1,7 +1,7 @@
 #include "game.h"
 
 Game::Game() {
-	windowWidth = 1200;
+	windowWidth = 1280;
 	windowHeight = 720;
 	window = sf::RenderWindow(sf::VideoMode({ windowWidth, windowHeight }), "Breakout game");
 
@@ -19,6 +19,7 @@ Game::Game() {
 
 void Game::run() {
 	handleDeltaTime();
+	handleGamePhase();
 	systemInput();
 	systemMovement();
 	systemRender();
@@ -29,11 +30,16 @@ void Game::systemRender() {
 	window.clear(sf::Color::Black);
 	window.draw(*paddle->sprite);
 	window.draw(*ball->sprite);
+
+	for (auto& block : entityManager.getBlocks()) {
+		window.draw(*block->sprite);
+	}
+
 	window.display();
 }
 
 void Game::sytemCollison() {
-
+	handleCollisionBroadPhase();
 }
 
 void Game::systemMovement() {
@@ -50,6 +56,11 @@ void Game::handleDeltaTime() {
 	deltaTime = clock.restart().asSeconds();
 }
 
-std::shared_ptr<Paddle> createPaddle() {
+void Game::handleGamePhase() {
+	if (entityManager.getBlocks().empty()) {
+		entityManager.createBlocks(windowWidth, windowHeight);
+	}
+}
 
+void Game::handleCollisionBroadPhase() {
 }
