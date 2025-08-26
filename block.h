@@ -6,6 +6,6 @@ private:
 protected:
 	int health;
 public:
-	virtual void onCollision() {};
+	void onCollision(sf::Vector2f normal) override;
 	Block(sf::Vector2f position);
 };

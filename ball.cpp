@@ -1,5 +1,6 @@
 #pragma once
 #include "ball.h"
+#include "iostream"
 
 Ball::Ball(sf::Vector2f startPos) {
 	isAlive = true;
@@ -11,7 +12,7 @@ Ball::Ball(sf::Vector2f startPos) {
 	sprite->setPosition(startPos);
 
 	bool isEnabled = true;
-	int speed = 25;
+	int speed = 100;
 	bool hasGravity = true;
 
 	body = std::make_shared<Rigidbody>(isEnabled, speed, hasGravity);
@@ -19,10 +20,15 @@ Ball::Ball(sf::Vector2f startPos) {
 }
 
 void Ball::bounce() {
-
 }
 
-void Ball::onCollision() {
+void Ball::onCollision(sf::Vector2f normal) {
+	sf::Vector2f reflected = body->velocity - 2 * (body->velocity.dot(normal)) * normal;
+	body->velocity = reflected.normalized();
+}
 
+void Ball::onCollisionPlayer(const sf::Vector2f& position) {
+	sf::Vector2f dir = sprite->getPosition() - position;
+	body->velocity = dir.normalized();
 }
 

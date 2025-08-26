@@ -17,6 +17,8 @@ private:
 
 	void handleGamePhase();
 	void handleDeltaTime();
+	void handleBounds(Entity& entity);
+
 	void handleCollisionBroadPhase();
 
 	EntityManager entityManager;

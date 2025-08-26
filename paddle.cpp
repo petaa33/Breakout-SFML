@@ -13,13 +13,13 @@ Paddle::Paddle(sf::Vector2f startPos) {
 	sprite->setPosition(startPos);
 
 	bool isEnabled = true;
-	int speed = 25;
+	int speed = 125;
 	bool hasGravity = false;
 
 	body = std::make_shared<Rigidbody>(isEnabled, speed, hasGravity);
 }
 
-void Paddle::onCollision() {
+void Paddle::onCollision(sf::Vector2f normal) {
 
 }
 

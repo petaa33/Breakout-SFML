@@ -8,3 +8,7 @@ Block::Block(sf::Vector2f position) {
 	sprite = std::make_shared<sf::Sprite>(texture);
 	sprite->setPosition(position);
 }
+
+void Block::onCollision(sf::Vector2f normal) {
+
+}
