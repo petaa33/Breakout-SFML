@@ -18,7 +18,7 @@ private:
 	void handleGamePhase();
 	void handleDeltaTime();
 	void handleBounds(Entity& entity);
-
+	std::tuple<bool, float, sf::Vector2f> findGap(const sf::Shape& a, const sf::Shape& b);
 	void handleCollisionBroadPhase();
 
 	EntityManager entityManager;

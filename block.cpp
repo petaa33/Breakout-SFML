@@ -5,8 +5,8 @@ Block::Block(sf::Vector2f position) {
 	
 	health = 1;
 	texture = sf::Texture("block.png");
-	sprite = std::make_shared<sf::Sprite>(texture);
-	sprite->setPosition(position);
+	shape = std::make_shared<sf::RectangleShape>(sf::Vector2f(128,32));
+	shape->setPosition(position);
 }
 
 void Block::onCollision(sf::Vector2f normal) {

@@ -8,9 +8,9 @@ Paddle::Paddle(sf::Vector2f startPos) {
 	int height = 32;
 
 	texture = sf::Texture("paddle.png");
-	sprite = std::make_shared<sf::Sprite>(texture);
-	sprite->setOrigin(sf::Vector2f(width / 2, height / 2));
-	sprite->setPosition(startPos);
+	shape = std::make_shared<sf::RectangleShape>(sf::Vector2f(width, height));
+	shape->setOrigin(sf::Vector2f(width / 2, height / 2));
+	shape->setPosition(startPos);
 
 	bool isEnabled = true;
 	int speed = 125;
