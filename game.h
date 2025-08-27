@@ -4,6 +4,12 @@
 #include "entityManager.h"
 #include "vector"
 
+struct Gap {
+	bool gapFound;
+	float overlap;
+	sf::Vector2f axis;
+};
+
 class Game {
 private:
 	unsigned int windowWidth, windowHeight;
@@ -17,12 +23,14 @@ private:
 
 	void handleGamePhase();
 	void handleDeltaTime();
-	std::tuple<bool, float, sf::Vector2f> findGap(const sf::Shape& a, const sf::Shape& b);
+	
+	Gap findGap(const sf::Shape& a, const sf::Shape& b);
 
 	void handleCollisionBroadPhase();
 	void handleCollision(Entity& entity, const EntityVec& entities);
 
 	EntityManager entityManager;
+
 	std::shared_ptr<Paddle> paddle;
 	std::shared_ptr<Ball> ball;
 
@@ -31,3 +39,4 @@ public:
 	void run();
 	Game();
 };
+

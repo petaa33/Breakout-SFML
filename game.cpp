@@ -83,12 +83,14 @@ void Game::handleCollisionBroadPhase() {
 	}
 }
 
-std::tuple<bool, float, sf::Vector2f> Game::findGap(const sf::Shape& a, const sf::Shape& b) {
-	float smallestOverlap = 1;
+Gap Game::findGap(const sf::Shape& a, const sf::Shape& b) {
+	float smallestOverlap = 10000000000000;
 	sf::Vector2f axisOfSmallestOverlap;
 
 	sf::Vector2f pointA = a.getPoint(0) - a.getOrigin() + a.getPosition();
 	sf::Vector2f pointB = b.getPoint(0) - b.getOrigin() + b.getPosition();
+
+	Gap gap;
 
 	for (int i = 0; i < a.getPointCount(); i++) {
 		sf::Vector2f point = a.getPoint(i) - a.getOrigin() + a.getPosition();
@@ -130,7 +132,10 @@ std::tuple<bool, float, sf::Vector2f> Game::findGap(const sf::Shape& a, const sf
 
 		// No collision
 		if (overlap <= 0) {
-			return {true, 0, sf::Vector2f(0,0)};
+			gap.gapFound = true;
+			gap.overlap = 0;
+			gap.axis = sf::Vector2f(0, 0);
+			return gap;
 		}
 
 		if (overlap < smallestOverlap) {
@@ -139,30 +144,32 @@ std::tuple<bool, float, sf::Vector2f> Game::findGap(const sf::Shape& a, const sf
 		}
 	}
 
-	return { false, smallestOverlap, axisOfSmallestOverlap };
+	gap.gapFound = false;
+	gap.overlap = smallestOverlap;
+	gap.axis = axisOfSmallestOverlap;
+
+	return gap;
 }
 
 void Game::handleCollision(Entity& entity, const EntityVec& entities) {
 	for (auto& obj : entities) {
-		auto [gapFoundA, overlapA, axisA] = findGap(*entity.shape, *obj->shape);
-
-		if (gapFoundA) {
+		Gap gapA = findGap(*entity.shape, *obj->shape);
+		if (gapA.gapFound) {
 			continue;
 		}
 
-		auto [gapFoundB, overlapB, axisB] = findGap(*obj->shape, *entity.shape);
-
-		if (gapFoundB) {
+		Gap gapB = findGap(*obj->shape, *entity.shape);
+		if (gapB.gapFound) {
 			continue;
 		}
 
-		if (overlapA < overlapB) {
-			entity.shape->move(overlapA * axisA);
-			entity.onCollision(axisA);
+		Gap& smallestGap = gapA.overlap < gapB.overlap ? gapA : gapB;
+
+		auto& velocity = entity.body->velocity;
+		if (velocity.dot(smallestGap.axis) > 0) {
+			smallestGap.axis = -smallestGap.axis;
 		}
-		else {
-			entity.shape->move(overlapB * axisB);
-			entity.onCollision(axisB);
-		}
+		entity.shape->move(smallestGap.overlap * smallestGap.axis);
+		entity.onCollision(smallestGap.axis);
 	}
 }
