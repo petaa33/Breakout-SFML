@@ -29,6 +29,10 @@ const EntityVec& EntityManager::getBlocks() {
 	return blocks;
 }
 
+const EntityVec& EntityManager::getBounds() {
+	return bounds;
+}
+
 void EntityManager::createBlocks(int windowWidth, int windowHeight) {
 	int blockWidth = 128;
 	int blockHeight = 32;
@@ -41,5 +45,14 @@ void EntityManager::createBlocks(int windowWidth, int windowHeight) {
 			blocks.push_back(block);
 		}
 	}
+}
+
+void EntityManager::createBounds(int windowWidth, int windowHeight) {
+	Barrier::windowWidth = windowWidth;
+	Barrier::windowHeight = windowHeight;
+
+	bounds.push_back(std::make_shared<Barrier>(Bound::TOP));
+	bounds.push_back(std::make_shared<Barrier>(Bound::LEFT));
+	bounds.push_back(std::make_shared<Barrier>(Bound::RIGHT));
 }
 

@@ -17,9 +17,10 @@ private:
 
 	void handleGamePhase();
 	void handleDeltaTime();
-	void handleBounds(Entity& entity);
 	std::tuple<bool, float, sf::Vector2f> findGap(const sf::Shape& a, const sf::Shape& b);
+
 	void handleCollisionBroadPhase();
+	void handleCollision(Entity& entity, const EntityVec& entities);
 
 	EntityManager entityManager;
 	std::shared_ptr<Paddle> paddle;

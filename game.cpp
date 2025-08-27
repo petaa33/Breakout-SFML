@@ -14,6 +14,7 @@ Game::Game() {
 
 	entityManager.add(paddle);
 	entityManager.add(ball);
+	entityManager.createBounds(windowWidth, windowHeight);
 
 	clock = sf::Clock();
 }
@@ -30,6 +31,11 @@ void Game::run() {
 
 void Game::systemRender() {
 	window.clear(sf::Color::Black);
+
+	for (auto& barrier : entityManager.getBounds()) {
+		window.draw(*barrier->shape);
+	}
+
 	window.draw(*paddle->shape);
 	window.draw(*ball->shape);
 
@@ -70,32 +76,10 @@ void Game::handleCollisionBroadPhase() {
 		ball->onCollisionPlayer(paddle->shape->getPosition());
 	}
 
-	// Collison between rigidbodies and blocks
+	// Collison between rigidbodies and static objects
 	for (auto entity : entityManager.getRigidbodyEntities()) {
-		handleBounds(*entity);
-
-		for (auto block : entityManager.getBlocks()) {
-			auto [gapFoundA, overlapA, axisA] = findGap(*entity->shape, *block->shape);
-
-			if (gapFoundA) {
-				continue;
-			}
-
-			auto [gapFoundB, overlapB, axisB] = findGap(*block->shape, *entity->shape);
-
-			if (gapFoundB) {
-				continue;
-			}
-
-			if (overlapA < overlapB) {
-				entity->shape->move(overlapA * axisA);
-				entity->onCollision(axisA);
-			}
-			else {
-				entity->shape->move(overlapB * axisB);
-				entity->onCollision(axisB);
-			}
-		}
+		handleCollision(*entity, entityManager.getBlocks());
+		handleCollision(*entity, entityManager.getBounds());
 	}
 }
 
@@ -158,14 +142,27 @@ std::tuple<bool, float, sf::Vector2f> Game::findGap(const sf::Shape& a, const sf
 	return { false, smallestOverlap, axisOfSmallestOverlap };
 }
 
-void Game::handleBounds(Entity& entity) {
-	if (entity.shape->getGlobalBounds().size.x / 2 + entity.shape->getPosition().x >= windowWidth) {
-		entity.shape->setPosition(sf::Vector2f(windowWidth - entity.shape->getGlobalBounds().size.x / 2, entity.shape->getPosition().y));
-		entity.onCollision(sf::Vector2f(-1, 0));
-	}
+void Game::handleCollision(Entity& entity, const EntityVec& entities) {
+	for (auto& obj : entities) {
+		auto [gapFoundA, overlapA, axisA] = findGap(*entity.shape, *obj->shape);
 
-	if (entity.shape->getPosition().x - entity.shape->getGlobalBounds().size.x / 2 <= 0) {
-		entity.shape->setPosition(sf::Vector2f(entity.shape->getGlobalBounds().size.x / 2, entity.shape->getPosition().y));
-		entity.onCollision(sf::Vector2f(1, 0));
+		if (gapFoundA) {
+			continue;
+		}
+
+		auto [gapFoundB, overlapB, axisB] = findGap(*obj->shape, *entity.shape);
+
+		if (gapFoundB) {
+			continue;
+		}
+
+		if (overlapA < overlapB) {
+			entity.shape->move(overlapA * axisA);
+			entity.onCollision(axisA);
+		}
+		else {
+			entity.shape->move(overlapB * axisB);
+			entity.onCollision(axisB);
+		}
 	}
 }
