@@ -158,6 +158,7 @@
     <ClInclude Include="components.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="entityManager.h" />
+    <ClInclude Include="enums.hpp" />
     <ClInclude Include="game.h" />
     <ClInclude Include="paddle.h" />
   </ItemGroup>

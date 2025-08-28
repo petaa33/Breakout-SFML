@@ -1,12 +1,13 @@
 #pragma once
 #include "barrier.h"
 #include "SFML/Graphics.hpp"
+#include "enums.hpp"
 
 int Barrier::windowWidth = 0;
 int Barrier::windowHeight = 0;
 
 Barrier::Barrier(Bound bound) {
-	tag = "Barrier";
+	tag = utils::EntityTag::Barrier;
 	
 	float width = 0;
 	float height = 0;
@@ -40,4 +41,6 @@ Barrier::Barrier(Bound bound) {
 	shape->setOrigin(origin);
 	shape->setPosition(position);
 	shape->setFillColor(sf::Color::Green);
+
+	body = std::make_shared<Rigidbody>(false, 0, 0);
 }

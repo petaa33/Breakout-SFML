@@ -1,5 +1,6 @@
 #pragma once
 #include "entity.h"
+#include "enums.hpp"
 
 class Paddle : public Entity {
 public:

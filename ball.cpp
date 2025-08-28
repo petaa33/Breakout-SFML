@@ -1,10 +1,14 @@
 #pragma once
 #include "ball.h"
 #include "iostream"
+#include "enums.hpp"
 
 Ball::Ball(sf::Vector2f startPos) {
+	tag = utils::EntityTag::Ball;
+	name = "Ball";
+
 	isAlive = true;
-	int radius = 24;
+	int radius = 12;
 
 	texture = sf::Texture("ball.png");
 	shape = std::make_shared<sf::CircleShape>(radius, 12);
@@ -12,7 +16,7 @@ Ball::Ball(sf::Vector2f startPos) {
 	shape->setPosition(startPos);
 
 	bool isEnabled = true;
-	int speed = 100;
+	int speed = 250;
 	bool hasGravity = true;
 
 	body = std::make_shared<Rigidbody>(isEnabled, speed, hasGravity);

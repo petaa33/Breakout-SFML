@@ -3,6 +3,7 @@
 #include "components.h"
 
 Paddle::Paddle(sf::Vector2f startPos) {
+	tag = utils::EntityTag::Paddle;
 	isAlive = true;
 	int width = 128;
 	int height = 32;
@@ -11,9 +12,10 @@ Paddle::Paddle(sf::Vector2f startPos) {
 	shape = std::make_shared<sf::RectangleShape>(sf::Vector2f(width, height));
 	shape->setOrigin(sf::Vector2f(width / 2, height / 2));
 	shape->setPosition(startPos);
+	shape->setTexture(&texture);
 
 	bool isEnabled = true;
-	int speed = 125;
+	int speed = 200;
 	bool hasGravity = false;
 
 	body = std::make_shared<Rigidbody>(isEnabled, speed, hasGravity);

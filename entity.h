@@ -1,11 +1,13 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include "components.h"
+#include "enums.hpp"
 
 class Entity {
 public:
 	bool isAlive = true;
-	std::string tag;
+	utils::EntityTag tag;
+	std::string name = "Entity";
 	sf::Texture texture;
 	std::shared_ptr<sf::Shape> shape;
 	std::shared_ptr<Rigidbody> body;

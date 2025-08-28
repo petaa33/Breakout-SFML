@@ -1,4 +1,5 @@
 #include "entityManager.h"
+#include <algorithm>
 
 void EntityManager::add(const std::shared_ptr<Entity> entity) {
 	entitiesToBeAdded.push_back(entity);
@@ -18,7 +19,17 @@ void EntityManager::update() {
 }
 
 void EntityManager::removeDead() {
-	
+	entities.erase(std::remove_if(
+		entities.begin(),
+		entities.end(), 
+		[&](std::shared_ptr<Entity>& entity) {
+			if (!entity->isAlive) {
+				removeEntity(entity->tag, entity->name);
+				return true;
+			}
+			return false;
+		}),
+		entities.end());
 }
 
 const EntityVec& EntityManager::getRigidbodyEntities() {
@@ -33,6 +44,10 @@ const EntityVec& EntityManager::getBounds() {
 	return bounds;
 }
 
+const EntityVec& EntityManager::getEntities() {
+	return entities;
+}
+
 void EntityManager::createBlocks(int windowWidth, int windowHeight) {
 	int blockWidth = 128;
 	int blockHeight = 32;
@@ -41,8 +56,10 @@ void EntityManager::createBlocks(int windowWidth, int windowHeight) {
 
 	for (int i = 0; i < numOfBlocksX; i++) {
 		for (int j = 0; j < numOfBlocksY; j++) {
-			std::shared_ptr<Block> block = std::make_shared<Block>(sf::Vector2f(i * blockWidth, j * blockHeight));
+			std::string tag = "Block-" + i + j;
+			std::shared_ptr<Block> block = std::make_shared<Block>(sf::Vector2f(i * blockWidth, j * blockHeight), tag);
 			blocks.push_back(block);
+			add(block);
 		}
 	}
 }
@@ -54,5 +71,30 @@ void EntityManager::createBounds(int windowWidth, int windowHeight) {
 	bounds.push_back(std::make_shared<Barrier>(Bound::TOP));
 	bounds.push_back(std::make_shared<Barrier>(Bound::LEFT));
 	bounds.push_back(std::make_shared<Barrier>(Bound::RIGHT));
+}
+
+void EntityManager::removeEntity(utils::EntityTag tag, std::string& name) {
+	EntityVec* entities = nullptr;
+
+	switch (tag)
+	{
+	case utils::Block:
+		entities = &blocks;
+		break;
+	case utils::Paddle:
+		break;
+	case utils::Ball:
+		entities = &rigidbodyEntities;
+		break;
+	case utils::Barrier:
+		break;
+	default:
+		break;
+	}
+
+	auto it = std::find_if(entities->begin(), entities->end(), [&](std::shared_ptr<Entity>& entity) { return entity->name == name; });
+	if (it != entities->end()) {
+		entities->erase(it);
+	}
 }
 

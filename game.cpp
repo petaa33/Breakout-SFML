@@ -36,11 +36,8 @@ void Game::systemRender() {
 		window.draw(*barrier->shape);
 	}
 
-	window.draw(*paddle->shape);
-	window.draw(*ball->shape);
-
-	for (auto& block : entityManager.getBlocks()) {
-		window.draw(*block->shape);
+	for (auto& entity : entityManager.getEntities()) {
+		window.draw(*entity->shape);
 	}
 
 	window.display();
@@ -170,6 +167,8 @@ void Game::handleCollision(Entity& entity, const EntityVec& entities) {
 			smallestGap.axis = -smallestGap.axis;
 		}
 		entity.shape->move(smallestGap.overlap * smallestGap.axis);
+
 		entity.onCollision(smallestGap.axis);
+		obj->onCollision(smallestGap.axis);
 	}
 }
