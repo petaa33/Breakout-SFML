@@ -16,7 +16,7 @@ Ball::Ball(sf::Vector2f startPos) {
 	shape->setPosition(startPos);
 
 	bool isEnabled = true;
-	int speed = 250;
+	int speed = 300;
 	bool hasGravity = true;
 
 	body = std::make_shared<Rigidbody>(isEnabled, speed, hasGravity);

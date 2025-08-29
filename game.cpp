@@ -3,7 +3,7 @@
 
 Game::Game() {
 	windowWidth = 1280;
-	windowHeight = 720;
+	windowHeight = 800;
 	window = sf::RenderWindow(sf::VideoMode({ windowWidth, windowHeight }), "Breakout game");
 
 	sf::Vector2f playerStartPos(windowWidth/2, windowHeight - 100);

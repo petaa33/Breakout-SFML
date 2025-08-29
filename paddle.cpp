@@ -15,7 +15,7 @@ Paddle::Paddle(sf::Vector2f startPos) {
 	shape->setTexture(&texture);
 
 	bool isEnabled = true;
-	int speed = 200;
+	int speed = 250;
 	bool hasGravity = false;
 
 	body = std::make_shared<Rigidbody>(isEnabled, speed, hasGravity);

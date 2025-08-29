@@ -4,6 +4,7 @@
 #include "barrier.h"
 #include "map"
 #include "enums.hpp"
+#include <string>
 
 typedef std::vector<std::shared_ptr<Entity>> EntityVec;
 

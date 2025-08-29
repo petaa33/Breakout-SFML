@@ -49,15 +49,35 @@ const EntityVec& EntityManager::getEntities() {
 }
 
 void EntityManager::createBlocks(int windowWidth, int windowHeight) {
-	int blockWidth = 128;
-	int blockHeight = 32;
+	int blockWidth = 160;
+	int blockHeight = 50;
 	int numOfBlocksX = windowWidth / blockWidth;
 	int numOfBlocksY = 5;
 
 	for (int i = 0; i < numOfBlocksX; i++) {
 		for (int j = 0; j < numOfBlocksY; j++) {
-			std::string tag = "Block-" + i + j;
-			std::shared_ptr<Block> block = std::make_shared<Block>(sf::Vector2f(i * blockWidth, j * blockHeight), tag);
+			std::string name = "Block-" + std::to_string(i) + std::to_string(j);
+			sf::Vector2f size(blockWidth, blockHeight);
+			sf::Color color;
+
+			switch (j)
+			{
+			case 0: color = sf::Color::Blue;
+				break;
+			case 1: color = sf::Color::Red;
+				break;
+			case 2: color = sf::Color::Yellow;
+				break;
+			case 3: color = sf::Color::Green;
+				break;
+			case 4:color = sf::Color::Magenta;
+				break;
+			default:
+				color = sf::Color::White;
+				break;
+			}
+
+			std::shared_ptr<Block> block = std::make_shared<Block>(sf::Vector2f(i * blockWidth, j * blockHeight), name, size, color);
 			blocks.push_back(block);
 			add(block);
 		}
