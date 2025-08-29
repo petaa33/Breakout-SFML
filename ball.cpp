@@ -16,7 +16,7 @@ Ball::Ball(sf::Vector2f startPos) {
 	shape->setPosition(startPos);
 
 	bool isEnabled = true;
-	int speed = 300;
+	int speed = 450;
 	bool hasGravity = true;
 
 	body = std::make_shared<Rigidbody>(isEnabled, speed, hasGravity);
@@ -27,7 +27,6 @@ void Ball::bounce() {
 }
 
 void Ball::onCollision(sf::Vector2f normal) {
-	std::cout << normal.x << " " << normal.y << "\n";
 	sf::Vector2f reflected = body->velocity - 2 * (body->velocity.dot(normal)) * normal;
 	body->velocity = reflected.normalized();
 }
