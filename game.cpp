@@ -17,7 +17,7 @@ Game::Game() {
 	entityManager.add(ball);
 	entityManager.createBounds(windowWidth, windowHeight);
 
-	clock = sf::Clock();
+	health = Health(windowWidth);
 }
 
 void Game::run() {
@@ -39,6 +39,10 @@ void Game::systemRender() {
 
 	for (auto& entity : entityManager.getEntities()) {
 		window.draw(*entity->shape);
+	}
+
+	for (auto& heart : health.getSprites()) {
+		window.draw(heart);
 	}
 
 	window.draw(Score::getInstance().getText());
@@ -64,6 +68,11 @@ void Game::handleDeltaTime() {
 }
 
 void Game::handleGamePhase() {
+	if ((ball->shape->getPosition().y + ball->shape->getOrigin().y) >= windowHeight) {
+		health.remove();
+		ball->shape->setPosition(sf::Vector2f(windowWidth / 2, windowHeight / 2));
+	}
+
 	if (entityManager.getBlocks().empty()) {
 		entityManager.createBlocks(windowWidth, windowHeight);
 	}

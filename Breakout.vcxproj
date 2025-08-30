@@ -148,6 +148,7 @@
     <ClCompile Include="block.cpp" />
     <ClCompile Include="entityManager.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="health.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="paddle.cpp" />
     <ClCompile Include="score.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="entityManager.h" />
     <ClInclude Include="enums.hpp" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="health.h" />
     <ClInclude Include="paddle.h" />
     <ClInclude Include="score.h" />
   </ItemGroup>
