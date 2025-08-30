@@ -9,6 +9,7 @@ public:
 	static sf::Color getBlockColor(int index);
 	Block(sf::Vector2f position, std::string& name, sf::Vector2f size, sf::Color color);
 	Block() {};
+	~Block();
 };
 
 class PlainBlock : public Block {

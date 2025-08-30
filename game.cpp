@@ -1,5 +1,6 @@
 #include "game.h"
 #include "iostream"
+#include "score.h"
 
 Game::Game() {
 	windowWidth = 1280;
@@ -40,6 +41,7 @@ void Game::systemRender() {
 		window.draw(*entity->shape);
 	}
 
+	window.draw(Score::getInstance().getText());
 	window.display();
 }
 

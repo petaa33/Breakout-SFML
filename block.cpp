@@ -1,4 +1,5 @@
 #include "block.h"
+#include "score.h"
 #include <iostream>
 
 sf::Color Block::getBlockColor(int index) {
@@ -24,6 +25,10 @@ Block::Block(sf::Vector2f position, std::string& name, sf::Vector2f size, sf::Co
 	shape->setFillColor(color);
 
 	body = std::make_shared<Rigidbody>(false, 0, 0);
+}
+
+Block::~Block() {
+	Score::getInstance().updateScore(50);
 }
 
 PlainBlock::PlainBlock(sf::Vector2f position, std::string& name, sf::Vector2f size, sf::Color color) : Block(position, name, size, color) {
