@@ -33,8 +33,9 @@ private:
 	EntityManager entityManager;
 	std::shared_ptr<Paddle> paddle;
 	std::shared_ptr<Ball> ball;
-	Health health;
 
+	Health health;
+	void resetGame();
 public:
 	sf::RenderWindow window;
 	void run();

@@ -21,3 +21,8 @@ void Score::updateScore(int value) {
 const sf::Text& Score::getText() const {
 	return text;
 }
+
+void Score::reset() {
+	instance.value = 0;
+	updateScore(0);
+}

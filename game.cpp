@@ -21,8 +21,8 @@ Game::Game() {
 }
 
 void Game::run() {
-	handleDeltaTime();
 	handleGamePhase();
+	handleDeltaTime();
 	systemInput();
 	systemMovement();
 	sytemCollison();
@@ -68,6 +68,12 @@ void Game::handleDeltaTime() {
 }
 
 void Game::handleGamePhase() {
+
+	if (health.getSprites().size() <= 0) {
+		resetGame();
+		return;
+	}
+
 	if ((ball->shape->getPosition().y + ball->shape->getOrigin().y) >= windowHeight) {
 		health.remove();
 		ball->shape->setPosition(sf::Vector2f(windowWidth / 2, windowHeight / 2));
@@ -182,4 +188,10 @@ void Game::handleCollision(Entity& entity, const EntityVec& entities) {
 		entity.onCollision(smallestGap.axis);
 		obj->onCollision(smallestGap.axis);
 	}
+}
+
+void Game::resetGame() {
+	Score::getInstance().reset();
+	health.add(3, windowWidth);
+	ball->shape->setPosition(sf::Vector2f(windowWidth / 2, windowHeight / 2));
 }

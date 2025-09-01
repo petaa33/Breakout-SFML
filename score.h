@@ -18,4 +18,5 @@ public:
 	static Score& getInstance();
 	void updateScore(int value);
 	const sf::Text& getText() const;
+	void reset();
 };
