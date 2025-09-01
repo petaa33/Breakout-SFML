@@ -2,6 +2,12 @@
 #include "score.h"
 #include <iostream>
 
+BlockTag getRandomBlockTag() {
+	int max = static_cast<int>(BlockTag::BLOCK_TAG_MAX) - 1;
+	int min = 1;
+
+	return static_cast<BlockTag>(rand() % (max - min + 1) + min);
+}
 sf::Color Block::getBlockColor(int index) {
 	switch (index)
 	{
@@ -55,4 +61,14 @@ void HardBlock::onCollision(sf::Vector2f normal) {
 	}
 
 	texture.loadFromFile("broken_block.png");
+}
+
+OilBlock::OilBlock(sf::Vector2f position, std::string& name, sf::Vector2f size, sf::Color color) : Block(position, name, size, color) {
+	health = 1;
+	texture = sf::Texture("oil_block.png");
+	shape->setTexture(&texture);
+}
+
+void OilBlock::onCollision(sf::Vector2f normal) {
+
 }

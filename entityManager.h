@@ -8,6 +8,11 @@
 
 typedef std::vector<std::shared_ptr<Entity>> EntityVec;
 
+struct RandomBlock {
+	int index = 0;
+	BlockTag tag = BlockTag::PLAIN;
+};
+
 class EntityManager {
 private:
 	EntityVec entities;

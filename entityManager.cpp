@@ -1,5 +1,7 @@
 #include "entityManager.h"
 #include <algorithm>
+#include <random>
+#include <iostream>
 
 void EntityManager::add(const std::shared_ptr<Entity> entity) {
 	entitiesToBeAdded.push_back(entity);
@@ -48,6 +50,7 @@ const EntityVec& EntityManager::getEntities() {
 	return entities;
 }
 
+
 void EntityManager::createBlocks(int windowWidth, int windowHeight) {
 	int blockWidth = 160;
 	int blockHeight = 50;
@@ -58,10 +61,23 @@ void EntityManager::createBlocks(int windowWidth, int windowHeight) {
 	int min = 0;
 	int max = numOfBlocksX * numOfBlocksY;
 
-	std::array<int, 8> hardblockIndexes;
+	std::vector<int> pool;
+	pool.reserve(max);
 
-	for (int i = 0; i < hardblockIndexes.size(); i++) {
-		hardblockIndexes[i] = rand() % (max - min + 1) + min;
+	for (int i = 0; i < max; i++) {
+		pool.push_back(i);
+	}
+
+	std::random_device rd;
+	std::mt19937 g(rd());
+	std::shuffle(pool.begin(), pool.end(), g);
+
+	std::array<RandomBlock, 10> uniqueBlocks;
+	
+	for (int i = 0; i < uniqueBlocks.size(); i++) {
+		std::cout << pool[i] << "\n";
+		uniqueBlocks[i].index = pool[i];
+		uniqueBlocks[i].tag = getRandomBlockTag();
 	}
 
 	for (int i = 0; i < numOfBlocksX; i++) {
@@ -74,11 +90,19 @@ void EntityManager::createBlocks(int windowWidth, int windowHeight) {
 			sf::Vector2f position(i * blockWidth, j * blockHeight + verticalGap);
 			std::shared_ptr<Block> block;
 
-			if (std::find(hardblockIndexes.begin(), hardblockIndexes.end(), index) != hardblockIndexes.end()) {
-				block = std::make_shared<HardBlock>(position, name, size, color);
-			}
-			else {
+			auto it = std::find_if(uniqueBlocks.begin(), uniqueBlocks.end(), [index](RandomBlock block) {return block.index == index; });
+
+			switch (it->tag)
+			{
+			case BlockTag::PLAIN: block = std::make_shared<PlainBlock>(position, name, size, color);
+				break;
+			case BlockTag::HARD: block = std::make_shared<HardBlock>(position, name, size, color);
+				break;
+			case BlockTag::OIL: block = std::make_shared<OilBlock>(position, name, size, color);
+				break;
+			default:
 				block = std::make_shared<PlainBlock>(position, name, size, color);
+				break;
 			}
 
 			blocks.push_back(block);
