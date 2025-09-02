@@ -24,7 +24,8 @@ private:
 
 	void handleGamePhase();
 	void handleDeltaTime();
-	
+	void removeOutOfBounds();
+
 	Gap findGap(const sf::Shape& a, const sf::Shape& b);
 
 	void handleCollisionBroadPhase();

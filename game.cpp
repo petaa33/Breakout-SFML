@@ -24,6 +24,7 @@ void Game::run() {
 	handleGamePhase();
 	handleDeltaTime();
 	systemInput();
+	removeOutOfBounds();
 	systemMovement();
 	sytemCollison();
 	systemRender();
@@ -90,10 +91,10 @@ void Game::handleCollisionBroadPhase() {
 		ball->onCollisionPlayer(paddle->shape->getPosition());
 	}
 
-	// Collison between rigidbodies and static objects
 	for (auto entity : entityManager.getRigidbodyEntities()) {
 		handleCollision(*entity, entityManager.getBlocks());
 		handleCollision(*entity, entityManager.getBounds());
+		handleCollision(*entity, entityManager.getRigidbodyEntities());
 	}
 }
 
@@ -167,6 +168,9 @@ Gap Game::findGap(const sf::Shape& a, const sf::Shape& b) {
 
 void Game::handleCollision(Entity& entity, const EntityVec& entities) {
 	for (auto& obj : entities) {
+		if (entity.name == obj->name) {
+			continue;
+		}
 		Gap gapA = findGap(*entity.shape, *obj->shape);
 		if (gapA.gapFound) {
 			continue;
@@ -180,6 +184,7 @@ void Game::handleCollision(Entity& entity, const EntityVec& entities) {
 		Gap& smallestGap = gapA.overlap < gapB.overlap ? gapA : gapB;
 
 		auto& velocity = entity.body->velocity;
+
 		if (velocity.dot(smallestGap.axis) > 0) {
 			smallestGap.axis = -smallestGap.axis;
 		}
@@ -194,4 +199,12 @@ void Game::resetGame() {
 	Score::getInstance().reset();
 	health.add(3, windowWidth);
 	ball->shape->setPosition(sf::Vector2f(windowWidth / 2, windowHeight / 2));
+}
+
+void Game::removeOutOfBounds() {
+	for (auto& entity : entityManager.getRigidbodyEntities()) {
+		if (entity->shape->getPosition().y + entity->shape->getOrigin().y > windowHeight && entity->tag != utils::EntityTag::Ball) {
+			entity->isAlive = false;
+		}
+	}
 }
