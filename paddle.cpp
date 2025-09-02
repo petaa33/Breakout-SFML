@@ -3,6 +3,7 @@
 #include "components.h"
 
 Paddle::Paddle(sf::Vector2f startPos) {
+	name = "Paddle";
 	tag = utils::EntityTag::Paddle;
 	isAlive = true;
 	int width = 128;

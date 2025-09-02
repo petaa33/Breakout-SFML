@@ -22,13 +22,14 @@ private:
 	EntityVec blocks;
 
 public:
-	void add(const std::shared_ptr<Entity> entity);
+	void add(const std::shared_ptr<Entity>& entity);
 	void removeDead();
 	void removeEntity(utils::EntityTag tag, std::string& name);
 	void update();
 
 	void createBlocks(int windowWidth, int windowHeight);
 	void createBounds(int windowWidth, int windowHeight);
+	void createBlockChildren();
 
 	const EntityVec& getRigidbodyEntities();
 	const EntityVec& getBlocks();

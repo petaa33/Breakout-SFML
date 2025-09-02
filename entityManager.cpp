@@ -3,11 +3,12 @@
 #include <random>
 #include <iostream>
 
-void EntityManager::add(const std::shared_ptr<Entity> entity) {
+void EntityManager::add(const std::shared_ptr<Entity>& entity) {
 	entitiesToBeAdded.push_back(entity);
 }
 
 void EntityManager::update() {
+	createBlockChildren();
 	removeDead();
 
 	for (std::shared_ptr<Entity> e : entitiesToBeAdded) {
@@ -120,20 +121,32 @@ void EntityManager::createBounds(int windowWidth, int windowHeight) {
 	bounds.push_back(std::make_shared<Barrier>(Bound::RIGHT));
 }
 
+void EntityManager::createBlockChildren() {
+	for (auto& entity : blocks) {
+		auto block = std::static_pointer_cast<Block>(entity);
+		if (!block->isAlive && block->child) {
+			add(block->child);
+		}
+	}
+}
+
 void EntityManager::removeEntity(utils::EntityTag tag, std::string& name) {
 	EntityVec* entities = nullptr;
 
 	switch (tag)
 	{
-	case utils::Block:
+	case utils::EntityTag::Block:
 		entities = &blocks;
 		break;
-	case utils::Paddle:
+	case utils::EntityTag::Paddle:
 		break;
-	case utils::Ball:
+	case utils::EntityTag::Ball:
 		entities = &rigidbodyEntities;
 		break;
-	case utils::Barrier:
+	case utils::EntityTag::Barrier:
+		break;
+	case utils::EntityTag::Oil:
+		entities = &rigidbodyEntities;
 		break;
 	default:
 		break;

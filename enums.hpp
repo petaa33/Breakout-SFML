@@ -1,10 +1,11 @@
 #pragma once
 
 namespace utils {
-	enum EntityTag {
+	enum class EntityTag {
 		Block,
 		Paddle,
 		Ball,
-		Barrier
+		Barrier,
+		Oil
 	};
 }
