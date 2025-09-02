@@ -12,7 +12,7 @@ class Barrier : public Entity {
 public:
 	Barrier() {};
 	Barrier(Bound bound);
-	void onCollision(sf::Vector2f normal) override {};
+	void onCollision(const sf::Vector2f& normal, const Entity& collidingObj) override {};
 	static int windowWidth;
 	static int windowHeight;
 };

@@ -41,6 +41,4 @@ Barrier::Barrier(Bound bound) {
 	shape->setOrigin(origin);
 	shape->setPosition(position);
 	shape->setFillColor(sf::Color::Green);
-
-	body = std::make_shared<Rigidbody>(false, 0, 0);
 }

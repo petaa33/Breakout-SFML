@@ -2,31 +2,30 @@
 #include "ball.h"
 #include "iostream"
 #include "enums.hpp"
+#include <string>
 
-Ball::Ball(sf::Vector2f startPos) {
-	tag = utils::EntityTag::Ball;
-	name = "Ball";
-
-	isAlive = true;
+Ball::Ball(const sf::Vector2f& startPos) : Entity(utils::EntityTag::Ball, "Ball", sf::Texture("ball.png")) {
 	int radius = 12;
 
-	texture = sf::Texture("ball.png");
 	shape = std::make_shared<sf::CircleShape>(radius, 12);
 	shape->setOrigin(sf::Vector2f(radius / 2, radius / 2));
 	shape->setPosition(startPos);
+	shape->setTexture(&texture);
 
-	bool isEnabled = true;
 	int speed = 450;
-	bool hasGravity = true;
+	sf::Vector2f velocity(0, -1);
 
-	body = std::make_shared<Rigidbody>(isEnabled, speed, hasGravity);
-	body->velocity = sf::Vector2f(0, -1);
+	body = std::make_shared<Rigidbody>(speed, velocity);
 }
 
 void Ball::bounce() {
 }
 
-void Ball::onCollision(sf::Vector2f normal) {
+void Ball::onCollision(const sf::Vector2f& normal, const Entity& collidingObj) {
+	if(collidingObj.tag == utils::EntityTag::Paddle) {
+		onCollisionPlayer(collidingObj.shape->getPosition());
+		return;
+	}
 	sf::Vector2f reflected = body->velocity - 2 * (body->velocity.dot(normal)) * normal;
 	body->velocity = reflected.normalized();
 }

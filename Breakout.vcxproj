@@ -148,9 +148,12 @@
     <ClCompile Include="block.cpp" />
     <ClCompile Include="entityManager.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="hardBlock.cpp" />
     <ClCompile Include="health.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="oilBlock.cpp" />
     <ClCompile Include="paddle.cpp" />
+    <ClCompile Include="plainBlock.cpp" />
     <ClCompile Include="score.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -162,8 +165,11 @@
     <ClInclude Include="entityManager.h" />
     <ClInclude Include="enums.hpp" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="hardBlock.h" />
     <ClInclude Include="health.h" />
+    <ClInclude Include="oilBlock.h" />
     <ClInclude Include="paddle.h" />
+    <ClInclude Include="plainBlock.h" />
     <ClInclude Include="score.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

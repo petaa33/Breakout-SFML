@@ -1,6 +1,7 @@
 #include "game.h"
 #include "iostream"
 #include "score.h"
+#include "iostream"
 
 Game::Game() {
 	windowWidth = 1280;
@@ -86,11 +87,6 @@ void Game::handleGamePhase() {
 }
 
 void Game::handleCollisionBroadPhase() {
-	// Collision between paddle and ball
-	if (paddle->shape->getGlobalBounds().findIntersection(ball->shape->getGlobalBounds())) {
-		ball->onCollisionPlayer(paddle->shape->getPosition());
-	}
-
 	for (auto entity : entityManager.getRigidbodyEntities()) {
 		handleCollision(*entity, entityManager.getBlocks());
 		handleCollision(*entity, entityManager.getBounds());
@@ -188,10 +184,20 @@ void Game::handleCollision(Entity& entity, const EntityVec& entities) {
 		if (velocity.dot(smallestGap.axis) > 0) {
 			smallestGap.axis = -smallestGap.axis;
 		}
-		entity.shape->move(smallestGap.overlap * smallestGap.axis);
 
-		entity.onCollision(smallestGap.axis);
-		obj->onCollision(smallestGap.axis);
+		// If collision between 2 rigidbodies -> move the smaller one
+		if (entity.body && obj->body) {
+			float entityVolume = entity.shape->getGlobalBounds().size.x * entity.shape->getGlobalBounds().size.y;
+			float objVolume = obj->shape->getGlobalBounds().size.x * obj->shape->getGlobalBounds().size.y;
+
+			Entity* smallerEntity = entityVolume < objVolume ? &entity : &*obj;
+			smallerEntity->shape->move(smallestGap.overlap * smallestGap.axis);
+		} else {
+			entity.shape->move(smallestGap.overlap * smallestGap.axis);
+		}
+
+		entity.onCollision(smallestGap.axis, *obj);
+		obj->onCollision(smallestGap.axis, entity);
 	}
 }
 

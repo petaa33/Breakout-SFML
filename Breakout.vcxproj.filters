@@ -16,6 +16,9 @@
     <Filter Include="Source Files\entities">
       <UniqueIdentifier>{0f02a924-5151-4459-94bc-ee2bcba1cb88}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\entities\blocks">
+      <UniqueIdentifier>{183f2e01-2c5b-4482-9a95-83edf1e94094}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -39,11 +42,20 @@
     <ClCompile Include="ball.cpp">
       <Filter>Source Files\entities</Filter>
     </ClCompile>
-    <ClCompile Include="block.cpp">
-      <Filter>Source Files\entities</Filter>
-    </ClCompile>
     <ClCompile Include="paddle.cpp">
       <Filter>Source Files\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="block.cpp">
+      <Filter>Source Files\entities\blocks</Filter>
+    </ClCompile>
+    <ClCompile Include="hardBlock.cpp">
+      <Filter>Source Files\entities\blocks</Filter>
+    </ClCompile>
+    <ClCompile Include="plainBlock.cpp">
+      <Filter>Source Files\entities\blocks</Filter>
+    </ClCompile>
+    <ClCompile Include="oilBlock.cpp">
+      <Filter>Source Files\entities\blocks</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -71,14 +83,23 @@
     <ClInclude Include="ball.h">
       <Filter>Source Files\entities</Filter>
     </ClInclude>
-    <ClInclude Include="block.h">
-      <Filter>Source Files\entities</Filter>
-    </ClInclude>
     <ClInclude Include="entity.h">
       <Filter>Source Files\entities</Filter>
     </ClInclude>
     <ClInclude Include="paddle.h">
       <Filter>Source Files\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="block.h">
+      <Filter>Source Files\entities\blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="hardBlock.h">
+      <Filter>Source Files\entities\blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="plainBlock.h">
+      <Filter>Source Files\entities\blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="oilBlock.h">
+      <Filter>Source Files\entities\blocks</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

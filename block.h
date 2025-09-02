@@ -17,36 +17,8 @@ protected:
 public:
 	std::shared_ptr<Entity> child = nullptr;
 	static sf::Color getBlockColor(int index);
-	Block(sf::Vector2f position, std::string& name, sf::Vector2f size, sf::Color color);
+
+	Block(const std::string& name, const sf::Texture& texture, const sf::Vector2f& size, const sf::Vector2f& position, const sf::Color& color);
 	Block() {};
 	~Block();
-};
-
-class PlainBlock : public Block {
-public: 
-	void onCollision(sf::Vector2f normal) override;
-	PlainBlock(sf::Vector2f position, std::string& name, sf::Vector2f size, sf::Color color);
-};
-
-class HardBlock : public Block {
-public:
-	void onCollision(sf::Vector2f normal) override;
-	HardBlock(sf::Vector2f position, std::string& name, sf::Vector2f size, sf::Color color);
-};
-
-class OilBlock : public Block {
-private:
-
-public:
-	void onCollision(sf::Vector2f normal) override;
-	OilBlock(sf::Vector2f position, std::string& name, sf::Vector2f size, sf::Color color);
-};
-
-class Oil : public Entity {
-private:
-	sf::Color color = sf::Color::White;
-public:
-	void onCollision(sf::Vector2f normal) override;
-	Oil() {};
-	Oil(sf::Vector2f position, std::string& name, sf::Vector2f size, sf::Color color);
 };

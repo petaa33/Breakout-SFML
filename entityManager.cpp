@@ -1,8 +1,10 @@
 #include "entityManager.h"
+#include "plainBlock.h"
+#include "hardBlock.h"
+#include "oilBlock.h"
 #include <algorithm>
 #include <random>
 #include <iostream>
-
 void EntityManager::add(const std::shared_ptr<Entity>& entity) {
 	entitiesToBeAdded.push_back(entity);
 }
@@ -12,7 +14,7 @@ void EntityManager::update() {
 	removeDead();
 
 	for (std::shared_ptr<Entity> e : entitiesToBeAdded) {
-		if (e->body->isEnabled) {
+		if (e->body) {
 			rigidbodyEntities.push_back(e);
 		}
 		entities.push_back(e);
@@ -95,14 +97,14 @@ void EntityManager::createBlocks(int windowWidth, int windowHeight) {
 
 			switch (it->tag)
 			{
-			case BlockTag::PLAIN: block = std::make_shared<PlainBlock>(position, name, size, color);
+			case BlockTag::PLAIN: block = std::make_shared<PlainBlock>(name, size, position, color);
 				break;
-			case BlockTag::HARD: block = std::make_shared<HardBlock>(position, name, size, color);
+			case BlockTag::HARD: block = std::make_shared<HardBlock>(name, size, position, color);
 				break;
-			case BlockTag::OIL: block = std::make_shared<OilBlock>(position, name, size, color);
+			case BlockTag::OIL: block = std::make_shared<OilBlock>(name, size, position, color);
 				break;
 			default:
-				block = std::make_shared<PlainBlock>(position, name, size, color);
+				block = std::make_shared<PlainBlock>(name, size, position, color);
 				break;
 			}
 

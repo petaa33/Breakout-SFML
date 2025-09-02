@@ -6,12 +6,15 @@
 class Entity {
 public:
 	bool isAlive = true;
-	utils::EntityTag tag;
+	utils::EntityTag tag = utils::EntityTag::Block;
 	std::string name = "Entity";
 	sf::Texture texture;
-	std::shared_ptr<sf::Shape> shape;
-	std::shared_ptr<Rigidbody> body;
 
-	virtual void onCollision(sf::Vector2f normal) = 0;
+	std::shared_ptr<sf::Shape> shape = nullptr;
+	std::shared_ptr<Rigidbody> body = nullptr;
+
+	virtual void onCollision(const sf::Vector2f& normal, const Entity& collidingObj) = 0;
+
 	Entity() {};
+	Entity(utils::EntityTag tag, const std::string& name, const sf::Texture& texture) : tag(tag), name(name), texture(texture) {};
 };
