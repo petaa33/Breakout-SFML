@@ -57,6 +57,9 @@
     <ClCompile Include="oilBlock.cpp">
       <Filter>Source Files\entities\blocks</Filter>
     </ClCompile>
+    <ClCompile Include="components.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">

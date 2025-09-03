@@ -3,6 +3,8 @@
 #include "score.h"
 #include "iostream"
 
+float Game::deltaTime = 0;
+
 Game::Game() {
 	windowWidth = 1280;
 	windowHeight = 800;
@@ -26,6 +28,7 @@ void Game::run() {
 	handleDeltaTime();
 	systemInput();
 	removeOutOfBounds();
+	systemModifiers();
 	systemMovement();
 	sytemCollison();
 	systemRender();
@@ -211,6 +214,18 @@ void Game::removeOutOfBounds() {
 	for (auto& entity : entityManager.getRigidbodyEntities()) {
 		if (entity->shape->getPosition().y + entity->shape->getOrigin().y > windowHeight && entity->tag != utils::EntityTag::Ball) {
 			entity->isAlive = false;
+		}
+	}
+}
+
+void Game::systemModifiers() {
+	// Only rigidbodies can have modifiers
+	for (auto& entity : entityManager.getRigidbodyEntities()) {
+		entity->modifiers.erase(std::remove_if(entity->modifiers.begin(), entity->modifiers.end(), 
+			[&](std::unique_ptr<Modifier>& modifier) {return !modifier->isActive; }), entity->modifiers.end());
+
+		for (auto& modifier : entity->modifiers) {
+			modifier->update();
 		}
 	}
 }

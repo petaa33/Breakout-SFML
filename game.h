@@ -15,12 +15,12 @@ class Game {
 private:
 	unsigned int windowWidth, windowHeight;
 	sf::Clock clock;
-	float deltaTime = 0;
 
 	void sytemCollison();
 	void systemMovement();
 	void systemInput();
 	void systemRender();
+	void systemModifiers();
 
 	void handleGamePhase();
 	void handleDeltaTime();
@@ -37,7 +37,9 @@ private:
 
 	Health health;
 	void resetGame();
+
 public:
+	static float deltaTime;
 	sf::RenderWindow window;
 	void run();
 	Game();

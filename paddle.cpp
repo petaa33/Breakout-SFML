@@ -18,6 +18,11 @@ Paddle::Paddle(const sf::Vector2f& startPos) : Entity(utils::EntityTag::Paddle, 
 }
 
 void Paddle::onCollision(const sf::Vector2f& normal, const Entity& collidingObj) {
+	if (collidingObj.tag == utils::EntityTag::Oil) {
+		float duration = 2.5f;
+		modifiers.push_back(std::make_unique<SpeedDebuff>(this, duration, collidingObj.shape->getFillColor()));
+	}
+
 
 }
 

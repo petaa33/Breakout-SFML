@@ -146,6 +146,7 @@
     <ClCompile Include="ball.cpp" />
     <ClCompile Include="barrier.cpp" />
     <ClCompile Include="block.cpp" />
+    <ClCompile Include="components.cpp" />
     <ClCompile Include="entityManager.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="hardBlock.cpp" />

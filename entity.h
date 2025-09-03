@@ -12,6 +12,7 @@ public:
 
 	std::shared_ptr<sf::Shape> shape = nullptr;
 	std::shared_ptr<Rigidbody> body = nullptr;
+	std::vector<std::unique_ptr<Modifier>> modifiers;
 
 	virtual void onCollision(const sf::Vector2f& normal, const Entity& collidingObj) = 0;
 
