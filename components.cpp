@@ -21,3 +21,44 @@ void SpeedDebuff::update() {
 		isActive = false;
 	}
 }
+
+IncreaseSize::IncreaseSize(Entity* entity, float duration) : 
+	Modifier(entity, duration), 
+	paddle(std::static_pointer_cast<sf::RectangleShape>(entity->shape)),
+	startSize(paddle.lock()->getSize()),
+	colorNotifyDelay(duration - 1) {};
+
+void IncreaseSize::update() {
+	timePassed += Game::deltaTime;
+
+	float t = timePassed / duration;
+	
+	if (t <= 1) {
+		float x = startSize.x + (targetSize - startSize.x) * t;
+		paddle.lock()->setSize(sf::Vector2f(x, startSize.y));
+	}
+
+	if (timePassed >= colorNotifyDelay) {
+		flashColor();
+	}
+
+	if (timePassed > duration) {
+		entity->shape->setFillColor(sf::Color::White);
+		paddle.lock()->setSize(startSize);
+		isActive = false;
+	}
+}
+
+void IncreaseSize::flashColor() {
+	colorTimePassed += Game::deltaTime;
+
+	if (colorTimePassed >= colorDuration) {
+		sf::Color color = entity->shape->getFillColor() == main ? secondary : main;
+		entity->shape->setFillColor(color);
+		colorTimePassed = 0;
+	}
+}
+
+IncreaseSize::~IncreaseSize() {
+	std::cout << "IncreaseSize modifier destoryed" << "\n";
+}

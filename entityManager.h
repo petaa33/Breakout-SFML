@@ -5,12 +5,13 @@
 #include "map"
 #include "enums.hpp"
 #include <string>
+#include "components.h"
 
 typedef std::vector<std::shared_ptr<Entity>> EntityVec;
 
 struct RandomBlock {
 	int index = 0;
-	BlockTag tag = BlockTag::PLAIN;
+	BlockTag tag;
 };
 
 class EntityManager {
@@ -24,7 +25,7 @@ private:
 public:
 	void add(const std::shared_ptr<Entity>& entity);
 	void removeDead();
-	void removeEntity(utils::EntityTag tag, std::string& name);
+	void removeEntity(const std::shared_ptr<Rigidbody> body, std::string& name);
 	void update();
 
 	void createBlocks(int windowWidth, int windowHeight);

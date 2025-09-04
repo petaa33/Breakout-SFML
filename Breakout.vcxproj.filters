@@ -60,6 +60,9 @@
     <ClCompile Include="components.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="shroomBlock.cpp">
+      <Filter>Source Files\entities\blocks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -104,5 +107,16 @@
     <ClInclude Include="oilBlock.h">
       <Filter>Source Files\entities\blocks</Filter>
     </ClInclude>
+    <ClInclude Include="shroomBlock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Breakout.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

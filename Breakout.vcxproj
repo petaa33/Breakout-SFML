@@ -156,6 +156,7 @@
     <ClCompile Include="paddle.cpp" />
     <ClCompile Include="plainBlock.cpp" />
     <ClCompile Include="score.cpp" />
+    <ClCompile Include="shroomBlock.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h" />
@@ -171,7 +172,12 @@
     <ClInclude Include="oilBlock.h" />
     <ClInclude Include="paddle.h" />
     <ClInclude Include="plainBlock.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="score.h" />
+    <ClInclude Include="shroomBlock.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Breakout.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

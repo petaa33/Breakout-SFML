@@ -37,3 +37,25 @@ public:
 	~SpeedDebuff();
 	void update() override;
 };
+
+class IncreaseSize : public Modifier {
+private:
+	sf::Color main = sf::Color::White;
+	sf::Color secondary = sf::Color(200, 200, 200, 255);
+
+	std::weak_ptr<sf::RectangleShape> paddle;
+	
+	float targetSize = 250;
+	sf::Vector2f startSize;
+	float increasedBy = 0;
+
+	float colorNotifyDelay = duration - 1;
+	float colorDuration = 0.1f;
+	float colorTimePassed = 0;
+
+	void flashColor();
+public:
+	IncreaseSize(Entity* entity, float duration);
+	~IncreaseSize();
+	void update() override;
+};

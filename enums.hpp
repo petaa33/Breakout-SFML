@@ -6,6 +6,7 @@ namespace utils {
 		Paddle,
 		Ball,
 		Barrier,
-		Oil
+		Oil,
+		Shroom
 	};
 }

@@ -2,9 +2,11 @@
 #include "plainBlock.h"
 #include "hardBlock.h"
 #include "oilBlock.h"
+#include "shroomBlock.h"
 #include <algorithm>
 #include <random>
 #include <iostream>
+
 void EntityManager::add(const std::shared_ptr<Entity>& entity) {
 	entitiesToBeAdded.push_back(entity);
 }
@@ -29,7 +31,7 @@ void EntityManager::removeDead() {
 		entities.end(), 
 		[&](std::shared_ptr<Entity>& entity) {
 			if (!entity->isAlive) {
-				removeEntity(entity->tag, entity->name);
+				removeEntity(entity->body, entity->name);
 				return true;
 			}
 			return false;
@@ -97,11 +99,11 @@ void EntityManager::createBlocks(int windowWidth, int windowHeight) {
 
 			switch (it->tag)
 			{
-			case BlockTag::PLAIN: block = std::make_shared<PlainBlock>(name, size, position, color);
-				break;
 			case BlockTag::HARD: block = std::make_shared<HardBlock>(name, size, position, color);
 				break;
 			case BlockTag::OIL: block = std::make_shared<OilBlock>(name, size, position, color);
+				break;
+			case BlockTag::SHROOM: block = std::make_shared<ShroomBlock>(name, size, position, color);
 				break;
 			default:
 				block = std::make_shared<PlainBlock>(name, size, position, color);
@@ -132,27 +134,10 @@ void EntityManager::createBlockChildren() {
 	}
 }
 
-void EntityManager::removeEntity(utils::EntityTag tag, std::string& name) {
+void EntityManager::removeEntity(const std::shared_ptr<Rigidbody> body, std::string& name) {
 	EntityVec* entities = nullptr;
 
-	switch (tag)
-	{
-	case utils::EntityTag::Block:
-		entities = &blocks;
-		break;
-	case utils::EntityTag::Paddle:
-		break;
-	case utils::EntityTag::Ball:
-		entities = &rigidbodyEntities;
-		break;
-	case utils::EntityTag::Barrier:
-		break;
-	case utils::EntityTag::Oil:
-		entities = &rigidbodyEntities;
-		break;
-	default:
-		break;
-	}
+	entities = body ? &rigidbodyEntities : &blocks;
 
 	auto it = std::find_if(entities->begin(), entities->end(), [&](std::shared_ptr<Entity>& entity) { return entity->name == name; });
 	if (it != entities->end()) {

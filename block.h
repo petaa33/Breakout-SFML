@@ -2,9 +2,9 @@
 #include "entity.h"
 
 enum class BlockTag {
-	PLAIN,
 	HARD,
 	OIL,
+	SHROOM,
 	BLOCK_TAG_MAX
 };
 
