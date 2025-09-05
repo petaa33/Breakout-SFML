@@ -1,6 +1,7 @@
 #pragma once
 #include "paddle.h"
 #include "components.h"
+#include <iostream>
 
 Paddle::Paddle(const sf::Vector2f& startPos) : Entity(utils::EntityTag::Paddle, "Paddle", sf::Texture("paddle.png")) {
 	int width = 128;
@@ -40,5 +41,10 @@ void Paddle::handleInput() {
 	{
 		body->velocity.x = 1;
 	}
+}
+
+sf::Vector2f Paddle::normalXTowardPaddle(const sf::Shape& shape) {
+	sf::Vector2f dir = this->shape->getPosition() - shape.getPosition();
+	return dir.dot(sf::Vector2f(1, 0)) > 0 ? sf::Vector2f(1, 0) : sf::Vector2f(-1, 0);
 }
 

@@ -8,4 +8,5 @@ public:
 	void handleInput();
 	Paddle() {};
 	Paddle(const sf::Vector2f& startPos);
+	sf::Vector2f normalXTowardPaddle(const sf::Shape& shape);
 };
