@@ -35,6 +35,7 @@ void IncreaseSize::update() {
 	
 	if (t <= 1) {
 		float x = startSize.x + (targetSize - startSize.x) * t;
+		paddle.lock()->setOrigin(sf::Vector2f(x/2, startSize.y/2));
 		paddle.lock()->setSize(sf::Vector2f(x, startSize.y));
 	}
 
@@ -44,6 +45,7 @@ void IncreaseSize::update() {
 
 	if (timePassed > duration) {
 		entity->shape->setFillColor(sf::Color::White);
+		paddle.lock()->setOrigin(sf::Vector2f(startSize.x/2, startSize.y/2));
 		paddle.lock()->setSize(startSize);
 		isActive = false;
 	}

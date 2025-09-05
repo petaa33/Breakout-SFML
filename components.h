@@ -41,7 +41,7 @@ public:
 class IncreaseSize : public Modifier {
 private:
 	sf::Color main = sf::Color::White;
-	sf::Color secondary = sf::Color(200, 200, 200, 255);
+	sf::Color secondary = sf::Color(100, 100, 100, 255);
 
 	std::weak_ptr<sf::RectangleShape> paddle;
 	
