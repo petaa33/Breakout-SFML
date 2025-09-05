@@ -18,16 +18,18 @@ Ball::Ball(const sf::Vector2f& startPos) : Entity(utils::EntityTag::Ball, "Ball"
 	body = std::make_shared<Rigidbody>(speed, velocity);
 }
 
-void Ball::bounce() {
+void Ball::bounce(sf::Vector2f normal) {
+	sf::Vector2f reflected = body->velocity - 2 * (body->velocity.dot(normal)) * normal;
+	body->velocity = reflected.normalized();
 }
 
 void Ball::onCollision(const sf::Vector2f& normal, const Entity& collidingObj) {
-	if(collidingObj.tag == utils::EntityTag::Paddle) {
-		onCollisionPlayer(collidingObj.shape->getPosition());
-		return;
+	switch (collidingObj.tag)
+	{
+	case utils::EntityTag::Paddle: onCollisionPlayer(collidingObj.shape->getPosition());
+		break;
+	default: bounce(normal);
 	}
-	sf::Vector2f reflected = body->velocity - 2 * (body->velocity.dot(normal)) * normal;
-	body->velocity = reflected.normalized();
 }
 
 void Ball::onCollisionPlayer(const sf::Vector2f& position) {

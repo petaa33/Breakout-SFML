@@ -4,7 +4,7 @@
 
 BlockTag getRandomBlockTag() {
 	int max = static_cast<int>(BlockTag::BLOCK_TAG_MAX) - 1;
-	int min = 1;
+	int min = 0;
 
 	return static_cast<BlockTag>(rand() % (max - min + 1) + min);
 }

@@ -186,6 +186,13 @@ void Game::handleCollision(Entity& entity, const EntityVec& entities) {
 
 		if (velocity.dot(smallestGap.axis) > 0) {
 			smallestGap.axis = -smallestGap.axis;
+		} 
+
+		// This is a special case where previous velocity - [velocity.dot(smallestGap.axis) > 0] can't determine axis from which collision happened since
+		// collision can happen between paddle and barrier with paddle having velocity<0,0>
+		// because paddle can have modifier which increases it's size and causes collision without actually moving
+		if (entity.tag == utils::EntityTag::Paddle && obj->tag == utils::EntityTag::Barrier && velocity == sf::Vector2f(0,0)) {
+			smallestGap.axis = static_cast<Paddle&>(entity).normalXTowardPaddle(*obj->shape);
 		}
 
 		// If collision between 2 rigidbodies -> move the smaller one

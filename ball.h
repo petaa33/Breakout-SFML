@@ -5,7 +5,7 @@
 
 class Ball : public Entity {
 private:
-	void bounce();
+	void bounce(sf::Vector2f normal);
 public:
 	Ball() {};
 	Ball(const sf::Vector2f& startPos);

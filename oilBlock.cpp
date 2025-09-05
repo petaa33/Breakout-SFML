@@ -29,5 +29,11 @@ Oil::Oil(const std::string& name, const sf::Vector2f& size, const sf::Vector2f& 
 }
 
 void Oil::onCollision(const sf::Vector2f& normal, const Entity& collidingObj) {
-	isAlive = false;
+	switch (collidingObj.tag)
+	{
+	case utils::EntityTag::Paddle: isAlive = false;
+		break;
+	default:
+		break;
+	}
 }
