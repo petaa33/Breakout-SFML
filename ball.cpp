@@ -1,10 +1,10 @@
 #pragma once
 #include "ball.h"
 #include "iostream"
-#include "enums.hpp"
+#include "utils.hpp"
 #include <string>
 
-Ball::Ball(const sf::Vector2f& startPos) : Entity(utils::EntityTag::Ball, "Ball", sf::Texture("ball.png")) {
+Ball::Ball(const std::string& name, const sf::Vector2f& startPos, sf::Vector2f& velocity) : Entity(utils::EntityTag::Ball, name, sf::Texture("ball.png")) {
 	int radius = 12;
 
 	shape = std::make_shared<sf::CircleShape>(radius, 12);
@@ -13,8 +13,6 @@ Ball::Ball(const sf::Vector2f& startPos) : Entity(utils::EntityTag::Ball, "Ball"
 	shape->setTexture(&texture);
 
 	int speed = 450;
-	sf::Vector2f velocity(0, -1);
-
 	body = std::make_shared<Rigidbody>(speed, velocity);
 }
 
