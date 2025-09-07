@@ -14,10 +14,8 @@ Game::Game() {
 	sf::Vector2f ballStartPos(windowWidth/2, windowHeight/2);
 
 	paddle = std::make_shared<Paddle>(playerStartPos);
-	ball = std::make_shared<Ball>(ballStartPos);
 
 	entityManager.add(paddle);
-	entityManager.add(ball);
 	entityManager.createBounds(windowWidth, windowHeight);
 
 	health = Health(windowWidth);
@@ -38,11 +36,7 @@ void Game::run() {
 void Game::systemRender() {
 	window.clear(sf::Color::Black);
 
-	for (auto& barrier : entityManager.getBounds()) {
-		window.draw(*barrier->shape);
-	}
-
-	for (auto& entity : entityManager.getEntities()) {
+	for (auto& entity : entityManager.getEntities(utils::EntityTag::Entity)) {
 		window.draw(*entity->shape);
 	}
 
@@ -59,13 +53,30 @@ void Game::sytemCollison() {
 }
 
 void Game::systemMovement() {
-	for (auto& entity : entityManager.getRigidbodyEntities()) {
+	for (auto& entity : entityManager.getEntities(utils::EntityTag::Rigidbody)) {
 		entity->shape->move(entity->body->velocity * entity->body->speed * deltaTime);
 	}
 }
 
 void Game::systemInput() {
 	paddle->handleInput();
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && entityManager.getEntities(utils::EntityTag::Ball).empty()) {
+		sf::Vector2f startPos = paddle->shape->getPosition() + sf::Vector2f(0, -35);
+
+		float xMin = -1;
+		float xMax = 1.1;
+		float yMin = -0.5f;
+		float yMax = -1.1;
+		
+		float x = utils::randomFloat(xMin, xMax);
+		float y = utils::randomFloat(yMin, yMax);
+
+		sf::Vector2f randomDirection(x, y);
+		std::string name = "Ball";
+
+		entityManager.add(std::make_shared<Ball>(name, startPos, randomDirection));
+	}
 }
 
 void Game::handleDeltaTime() {
@@ -73,27 +84,21 @@ void Game::handleDeltaTime() {
 }
 
 void Game::handleGamePhase() {
-
 	if (health.getSprites().size() <= 0) {
 		resetGame();
 		return;
 	}
 
-	if ((ball->shape->getPosition().y + ball->shape->getOrigin().y) >= windowHeight) {
-		health.remove();
-		ball->shape->setPosition(sf::Vector2f(windowWidth / 2, windowHeight / 2));
-	}
-
-	if (entityManager.getBlocks().empty()) {
+	if (entityManager.getEntities(utils::EntityTag::Block).empty()) {
 		entityManager.createBlocks(windowWidth, windowHeight);
 	}
 }
 
 void Game::handleCollisionBroadPhase() {
-	for (auto entity : entityManager.getRigidbodyEntities()) {
-		handleCollision(*entity, entityManager.getBlocks());
-		handleCollision(*entity, entityManager.getBounds());
-		handleCollision(*entity, entityManager.getRigidbodyEntities());
+	for (auto entity : entityManager.getEntities(utils::EntityTag::Rigidbody)) {
+		handleCollision(*entity, entityManager.getEntities(utils::EntityTag::Block));
+		handleCollision(*entity, entityManager.getEntities(utils::EntityTag::Barrier));
+		handleCollision(*entity, entityManager.getEntities(utils::EntityTag::Rigidbody));
 	}
 }
 
@@ -214,20 +219,23 @@ void Game::handleCollision(Entity& entity, const EntityVec& entities) {
 void Game::resetGame() {
 	Score::getInstance().reset();
 	health.add(3, windowWidth);
-	ball->shape->setPosition(sf::Vector2f(windowWidth / 2, windowHeight / 2));
 }
 
 void Game::removeOutOfBounds() {
-	for (auto& entity : entityManager.getRigidbodyEntities()) {
-		if (entity->shape->getPosition().y + entity->shape->getOrigin().y > windowHeight && entity->tag != utils::EntityTag::Ball) {
+	for (auto& entity : entityManager.getEntities(utils::EntityTag::Rigidbody)) {
+		if (entity->shape->getPosition().y + entity->shape->getOrigin().y > windowHeight) {
 			entity->isAlive = false;
+
+			if (entity->tag == utils::EntityTag::Ball) {
+				health.remove();
+			}
 		}
 	}
 }
 
 void Game::systemModifiers() {
 	// Only rigidbodies can have modifiers
-	for (auto& entity : entityManager.getRigidbodyEntities()) {
+	for (auto& entity : entityManager.getEntities(utils::EntityTag::Rigidbody)) {
 		entity->modifiers.erase(std::remove_if(entity->modifiers.begin(), entity->modifiers.end(), 
 			[&](std::unique_ptr<Modifier>& modifier) {return !modifier->isActive; }), entity->modifiers.end());
 

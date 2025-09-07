@@ -1,7 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include "components.h"
-#include "enums.hpp"
+#include "utils.hpp"
 
 class Entity {
 public:

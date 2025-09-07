@@ -1,7 +1,7 @@
 #pragma once
 #include "barrier.h"
 #include "SFML/Graphics.hpp"
-#include "enums.hpp"
+#include "utils.hpp"
 
 int Barrier::windowWidth = 0;
 int Barrier::windowHeight = 0;

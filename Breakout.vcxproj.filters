@@ -77,7 +77,7 @@
     <ClInclude Include="barrier.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="enums.hpp">
+    <ClInclude Include="utils.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="score.h">
