@@ -17,44 +17,31 @@ void EntityManager::update() {
 
 	for (std::shared_ptr<Entity> e : entitiesToBeAdded) {
 		if (e->body) {
-			rigidbodyEntities.push_back(e);
+			entitiesMap[utils::EntityTag::Rigidbody].push_back(e);
 		}
-		entities.push_back(e);
+
+		entitiesMap[e->tag].push_back(e);
+		entitiesMap[utils::EntityTag::Entity].push_back(e);
 	}
 
 	entitiesToBeAdded.clear();
 }
 
 void EntityManager::removeDead() {
-	entities.erase(std::remove_if(
-		entities.begin(),
-		entities.end(), 
-		[&](std::shared_ptr<Entity>& entity) {
-			if (!entity->isAlive) {
-				removeEntity(entity->body, entity->name);
-				return true;
-			}
-			return false;
-		}),
-		entities.end());
+	for (auto& [key, entityVec] : entitiesMap) {
+		entitiesMap[key].erase(std::remove_if(
+			entityVec.begin(),
+			entityVec.end(),
+			[&](std::shared_ptr<Entity>& entity) {
+				return !entity->isAlive;
+			}),
+			entityVec.end());
+	}
 }
 
-const EntityVec& EntityManager::getRigidbodyEntities() {
-	return rigidbodyEntities;
+const EntityVec& EntityManager::getEntities(utils::EntityTag tag) {
+	return entitiesMap[tag];
 }
-
-const EntityVec& EntityManager::getBlocks() {
-	return blocks;
-}
-
-const EntityVec& EntityManager::getBounds() {
-	return bounds;
-}
-
-const EntityVec& EntityManager::getEntities() {
-	return entities;
-}
-
 
 void EntityManager::createBlocks(int windowWidth, int windowHeight) {
 	int blockWidth = 160;
@@ -110,7 +97,7 @@ void EntityManager::createBlocks(int windowWidth, int windowHeight) {
 				break;
 			}
 
-			blocks.push_back(block);
+			entitiesMap[utils::EntityTag::Block].push_back(block);
 			add(block);
 		}
 	}
@@ -120,28 +107,17 @@ void EntityManager::createBounds(int windowWidth, int windowHeight) {
 	Barrier::windowWidth = windowWidth;
 	Barrier::windowHeight = windowHeight;
 
-	bounds.push_back(std::make_shared<Barrier>(Bound::TOP));
-	bounds.push_back(std::make_shared<Barrier>(Bound::LEFT));
-	bounds.push_back(std::make_shared<Barrier>(Bound::RIGHT));
+	entitiesMap[utils::EntityTag::Barrier].push_back(std::make_shared<Barrier>(Bound::TOP));
+	entitiesMap[utils::EntityTag::Barrier].push_back(std::make_shared<Barrier>(Bound::LEFT));
+	entitiesMap[utils::EntityTag::Barrier].push_back(std::make_shared<Barrier>(Bound::RIGHT));
 }
 
 void EntityManager::createBlockChildren() {
-	for (auto& entity : blocks) {
+	for (auto& entity : entitiesMap[utils::EntityTag::Block]) {
 		auto block = std::static_pointer_cast<Block>(entity);
 		if (!block->isAlive && block->child) {
 			add(block->child);
 		}
-	}
-}
-
-void EntityManager::removeEntity(const std::shared_ptr<Rigidbody> body, std::string& name) {
-	EntityVec* entities = nullptr;
-
-	entities = body ? &rigidbodyEntities : &blocks;
-
-	auto it = std::find_if(entities->begin(), entities->end(), [&](std::shared_ptr<Entity>& entity) { return entity->name == name; });
-	if (it != entities->end()) {
-		entities->erase(it);
 	}
 }
 
