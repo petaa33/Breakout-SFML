@@ -1,8 +1,9 @@
 #include "shroomBlock.h"
+#include "score.h"
 
 ShroomBlock::ShroomBlock(const std::string& name, const sf::Vector2f& size, const sf::Vector2f& position, const sf::Color& color) : 
 	Block(name, sf::Texture("shroom_block.png"), size, position, color) {
-
+	points = 40;
 	shape->setTexture(&texture);
 
 	sf::Vector2f blockOrigin(shape->getGlobalBounds().size.x / 2, shape->getGlobalBounds().size.y);
@@ -14,7 +15,10 @@ ShroomBlock::ShroomBlock(const std::string& name, const sf::Vector2f& size, cons
 }
 
 void ShroomBlock::onCollision(const sf::Vector2f& normal, const Entity& collidingObj) {
-	isAlive = false;
+	if (collidingObj.tag == utils::EntityTag::Ball) {
+		Score::getInstance().updateScore(points);
+		isAlive = false;
+	}
 };
 
 Shroom::Shroom(const std::string& name, const sf::Vector2f& size, const sf::Vector2f& position, const sf::Color& color) : Entity(utils::EntityTag::Shroom, name, sf::Texture("shroom.png")) {

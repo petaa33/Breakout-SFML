@@ -27,8 +27,4 @@ Block::Block(const std::string& name, const sf::Texture& texture, const sf::Vect
 	shape->setFillColor(color);
 }
 
-Block::~Block() {
-	Score::getInstance().updateScore(50);
-}
-
 

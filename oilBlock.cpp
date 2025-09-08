@@ -1,7 +1,9 @@
 #include "oilBlock.h"
+#include "score.h"
 
 OilBlock::OilBlock(const std::string& name, const sf::Vector2f& size, const sf::Vector2f& position, const sf::Color& color) : Block(name, sf::Texture("oil_block.png"), size, position, color) {
 	health = 1;
+	points = 25;
 	shape->setTexture(&texture);
 
 	sf::Vector2f blockOrigin(shape->getGlobalBounds().size.x / 2, shape->getGlobalBounds().size.y);
@@ -13,6 +15,7 @@ OilBlock::OilBlock(const std::string& name, const sf::Vector2f& size, const sf::
 }
 
 void OilBlock::onCollision(const sf::Vector2f& normal, const Entity& collidingObj) {
+	Score::getInstance().updateScore(points);
 	isAlive = false;
 }
 
