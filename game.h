@@ -29,7 +29,7 @@ private:
 	Gap findGap(const sf::Shape& a, const sf::Shape& b);
 
 	void handleCollisionBroadPhase();
-	void handleCollision(Entity& entity, const EntityVec& entities);
+	void handleCollision(Entity& entity, const EntityVecWeak& entities);
 
 	EntityManager entityManager;
 	std::shared_ptr<Paddle> paddle;

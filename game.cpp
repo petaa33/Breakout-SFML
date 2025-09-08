@@ -36,7 +36,7 @@ void Game::run() {
 void Game::systemRender() {
 	window.clear(sf::Color::Black);
 
-	for (auto& entity : entityManager.getEntities(utils::EntityTag::Entity)) {
+	for (auto& entity : entityManager.getEntities()) {
 		window.draw(*entity->shape);
 	}
 
@@ -53,8 +53,10 @@ void Game::sytemCollison() {
 }
 
 void Game::systemMovement() {
-	for (auto& entity : entityManager.getEntities(utils::EntityTag::Rigidbody)) {
-		entity->shape->move(entity->body->velocity * entity->body->speed * deltaTime);
+	for (auto& e : entityManager.getEntities(utils::EntityTag::Rigidbody)) {
+		if (const auto& entity = e.lock()) {
+			entity->shape->move(entity->body->velocity * entity->body->speed * deltaTime);
+		}
 	}
 }
 
@@ -95,10 +97,13 @@ void Game::handleGamePhase() {
 }
 
 void Game::handleCollisionBroadPhase() {
-	for (auto entity : entityManager.getEntities(utils::EntityTag::Rigidbody)) {
-		handleCollision(*entity, entityManager.getEntities(utils::EntityTag::Block));
-		handleCollision(*entity, entityManager.getEntities(utils::EntityTag::Barrier));
-		handleCollision(*entity, entityManager.getEntities(utils::EntityTag::Rigidbody));
+	for (auto e : entityManager.getEntities(utils::EntityTag::Rigidbody)) {
+		if (const auto& entity = e.lock()) {
+
+			handleCollision(*entity, entityManager.getEntities(utils::EntityTag::Block));
+			handleCollision(*entity, entityManager.getEntities(utils::EntityTag::Barrier));
+			handleCollision(*entity, entityManager.getEntities(utils::EntityTag::Rigidbody));
+		}
 	}
 }
 
@@ -170,64 +175,69 @@ Gap Game::findGap(const sf::Shape& a, const sf::Shape& b) {
 	return gap;
 }
 
-void Game::handleCollision(Entity& entity, const EntityVec& entities) {
-	for (auto& obj : entities) {
-		if (entity.name == obj->name) {
-			continue;
+void Game::handleCollision(Entity& entity, const EntityVecWeak& entities) {
+	for (auto& e : entities) {
+		if (const auto& obj = e.lock()) {
+			if (entity.name == obj->name) {
+				continue;
+			}
+			Gap gapA = findGap(*entity.shape, *obj->shape);
+			if (gapA.gapFound) {
+				continue;
+			}
+
+			Gap gapB = findGap(*obj->shape, *entity.shape);
+			if (gapB.gapFound) {
+				continue;
+			}
+
+			Gap& smallestGap = gapA.overlap < gapB.overlap ? gapA : gapB;
+
+			auto& velocity = entity.body->velocity;
+
+			if (velocity.dot(smallestGap.axis) > 0) {
+				smallestGap.axis = -smallestGap.axis;
+			} 
+
+			// This is a special case where previous velocity - [velocity.dot(smallestGap.axis) > 0] can't determine axis from which collision happened since
+			// collision can happen between paddle and barrier with paddle having velocity<0,0>
+			// because paddle can have modifier which increases it's size and causes collision without actually moving
+			if (entity.tag == utils::EntityTag::Paddle && obj->tag == utils::EntityTag::Barrier && velocity == sf::Vector2f(0,0)) {
+				smallestGap.axis = static_cast<Paddle&>(entity).normalXTowardPaddle(*obj->shape);
+			}
+
+			// If collision between 2 rigidbodies -> move the smaller one
+			if (entity.body && obj->body) {
+				float entityVolume = entity.shape->getGlobalBounds().size.x * entity.shape->getGlobalBounds().size.y;
+				float objVolume = obj->shape->getGlobalBounds().size.x * obj->shape->getGlobalBounds().size.y;
+
+				Entity* smallerEntity = entityVolume < objVolume ? &entity : &*obj;
+				smallerEntity->shape->move(smallestGap.overlap * smallestGap.axis);
+			} else {
+				entity.shape->move(smallestGap.overlap * smallestGap.axis);
+			}
+
+			entity.onCollision(smallestGap.axis, *obj);
+			obj->onCollision(smallestGap.axis, entity);
 		}
-		Gap gapA = findGap(*entity.shape, *obj->shape);
-		if (gapA.gapFound) {
-			continue;
-		}
-
-		Gap gapB = findGap(*obj->shape, *entity.shape);
-		if (gapB.gapFound) {
-			continue;
-		}
-
-		Gap& smallestGap = gapA.overlap < gapB.overlap ? gapA : gapB;
-
-		auto& velocity = entity.body->velocity;
-
-		if (velocity.dot(smallestGap.axis) > 0) {
-			smallestGap.axis = -smallestGap.axis;
-		} 
-
-		// This is a special case where previous velocity - [velocity.dot(smallestGap.axis) > 0] can't determine axis from which collision happened since
-		// collision can happen between paddle and barrier with paddle having velocity<0,0>
-		// because paddle can have modifier which increases it's size and causes collision without actually moving
-		if (entity.tag == utils::EntityTag::Paddle && obj->tag == utils::EntityTag::Barrier && velocity == sf::Vector2f(0,0)) {
-			smallestGap.axis = static_cast<Paddle&>(entity).normalXTowardPaddle(*obj->shape);
-		}
-
-		// If collision between 2 rigidbodies -> move the smaller one
-		if (entity.body && obj->body) {
-			float entityVolume = entity.shape->getGlobalBounds().size.x * entity.shape->getGlobalBounds().size.y;
-			float objVolume = obj->shape->getGlobalBounds().size.x * obj->shape->getGlobalBounds().size.y;
-
-			Entity* smallerEntity = entityVolume < objVolume ? &entity : &*obj;
-			smallerEntity->shape->move(smallestGap.overlap * smallestGap.axis);
-		} else {
-			entity.shape->move(smallestGap.overlap * smallestGap.axis);
-		}
-
-		entity.onCollision(smallestGap.axis, *obj);
-		obj->onCollision(smallestGap.axis, entity);
 	}
 }
 
 void Game::resetGame() {
 	Score::getInstance().reset();
+	entityManager.reset();
 	health.add(3, windowWidth);
 }
 
 void Game::removeOutOfBounds() {
-	for (auto& entity : entityManager.getEntities(utils::EntityTag::Rigidbody)) {
-		if (entity->shape->getPosition().y + entity->shape->getOrigin().y > windowHeight) {
-			entity->isAlive = false;
+	for (auto& e : entityManager.getEntities(utils::EntityTag::Rigidbody)) {
+		if (const auto& entity = e.lock()) {
+			if (entity->shape->getPosition().y + entity->shape->getOrigin().y > windowHeight) {
+				entity->isAlive = false;
 
-			if (entity->tag == utils::EntityTag::Ball) {
-				health.remove();
+				if (entity->tag == utils::EntityTag::Ball) {
+					health.remove();
+				}
 			}
 		}
 	}
@@ -235,12 +245,14 @@ void Game::removeOutOfBounds() {
 
 void Game::systemModifiers() {
 	// Only rigidbodies can have modifiers
-	for (auto& entity : entityManager.getEntities(utils::EntityTag::Rigidbody)) {
-		entity->modifiers.erase(std::remove_if(entity->modifiers.begin(), entity->modifiers.end(), 
-			[&](std::unique_ptr<Modifier>& modifier) {return !modifier->isActive; }), entity->modifiers.end());
+	for (auto& e : entityManager.getEntities(utils::EntityTag::Rigidbody)) {
+		if (const auto& entity = e.lock()) {
+			entity->modifiers.erase(std::remove_if(entity->modifiers.begin(), entity->modifiers.end(), 
+				[&](std::unique_ptr<Modifier>& modifier) {return !modifier->isActive; }), entity->modifiers.end());
 
-		for (auto& modifier : entity->modifiers) {
-			modifier->update();
+			for (auto& modifier : entity->modifiers) {
+				modifier->update();
+			}
 		}
 	}
 }
