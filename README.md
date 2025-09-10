@@ -1,0 +1,4 @@
+# Breakout game made with C++ and SFML
+## This project is a 2D Breakout-style game built in C++ with SFML, featuring Separating Axis Theorem (SAT) collision detection between entities. Beyond the classic gameplay, it includes mechanics such as multi-hit blocks, power-up/penalty drops (e.g., speed modifiers, paddle size adjustments), and block behaviors which increase challenge and add variety.
+
+![breakout](https://github.com/user-attachments/assets/27b46858-fc72-48c1-8ddd-4a4baf0c5798)
