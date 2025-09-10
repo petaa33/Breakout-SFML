@@ -12,4 +12,4 @@
 
 ## Requirements
 - C++17 compatible compiler (GCC 7+, Clang 5+, MSVC 2017+)
-- [SFML 2.5+](https://www.sfml-dev.org/download.php)
+- [SFML 3.0.0](https://www.sfml-dev.org/download.php)
