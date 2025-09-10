@@ -9,3 +9,7 @@
 | Move left     | A             |
 | Move right    | D             |
 | Shoot ball    | Space         |
+
+## Requirements
+- C++17 compatible compiler (GCC 7+, Clang 5+, MSVC 2017+)
+- [SFML 2.5+](https://www.sfml-dev.org/download.php)
