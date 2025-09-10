@@ -93,6 +93,10 @@ void Game::handleGamePhase() {
 
 	if (entityManager.getEntities(utils::EntityTag::Block).empty()) {
 		entityManager.createBlocks(windowWidth, windowHeight);
+
+		/*for (const auto& ball : entityManager.getEntities(utils::EntityTag::Ball)) {
+			ball.lock()->body->speed += 100;
+		}*/
 	}
 }
 

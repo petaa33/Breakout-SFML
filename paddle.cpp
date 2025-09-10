@@ -2,6 +2,7 @@
 #include "paddle.h"
 #include "components.h"
 #include <iostream>
+#include "audio.h"
 
 Paddle::Paddle(const sf::Vector2f& startPos) : Entity(utils::EntityTag::Paddle, "Paddle", sf::Texture("paddle.png")) {
 	int width = 128;
@@ -19,6 +20,8 @@ Paddle::Paddle(const sf::Vector2f& startPos) : Entity(utils::EntityTag::Paddle, 
 }
 
 void Paddle::onCollision(const sf::Vector2f& normal, const Entity& collidingObj) {
+	Audio::getInstance().play(SoundTag::PaddleHit);
+
 	switch (collidingObj.tag)
 	{
 	case utils::EntityTag::Oil: modifiers.push_back(std::make_unique<SpeedDebuff>(this, 2.5f, collidingObj.shape->getFillColor()));

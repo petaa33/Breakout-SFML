@@ -1,7 +1,7 @@
 #include "oilBlock.h"
 #include "score.h"
 
-OilBlock::OilBlock(const std::string& name, const sf::Vector2f& size, const sf::Vector2f& position, const sf::Color& color) : Block(name, sf::Texture("oil_block.png"), size, position, color) {
+OilBlock::OilBlock(const std::string& name, const sf::Vector2f& size, const sf::Vector2f& position, const sf::Color& color, SoundTag soundTag) : Block(name, sf::Texture("oil_block.png"), size, position, color, soundTag) {
 	health = 1;
 	points = 25;
 	shape->setTexture(&texture);
@@ -15,6 +15,7 @@ OilBlock::OilBlock(const std::string& name, const sf::Vector2f& size, const sf::
 }
 
 void OilBlock::onCollision(const sf::Vector2f& normal, const Entity& collidingObj) {
+	Audio::getInstance().play(soundTag);
 	Score::getInstance().updateScore(points);
 	isAlive = false;
 }

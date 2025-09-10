@@ -21,7 +21,7 @@ sf::Color Block::getBlockColor(int index) {
 	}
 }
 
-Block::Block(const std::string& name, const sf::Texture& texture, const sf::Vector2f& size, const sf::Vector2f& position, const sf::Color& color) : Entity(utils::EntityTag::Block, name, texture) {
+Block::Block(const std::string& name, const sf::Texture& texture, const sf::Vector2f& size, const sf::Vector2f& position, const sf::Color& color, SoundTag soundTag) : Entity(utils::EntityTag::Block, name, texture), soundTag(soundTag) {
 	shape = std::make_shared<sf::RectangleShape>(size);
 	shape->setPosition(position);
 	shape->setFillColor(color);

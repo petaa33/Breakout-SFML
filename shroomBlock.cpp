@@ -1,8 +1,8 @@
 #include "shroomBlock.h"
 #include "score.h"
 
-ShroomBlock::ShroomBlock(const std::string& name, const sf::Vector2f& size, const sf::Vector2f& position, const sf::Color& color) : 
-	Block(name, sf::Texture("shroom_block.png"), size, position, color) {
+ShroomBlock::ShroomBlock(const std::string& name, const sf::Vector2f& size, const sf::Vector2f& position, const sf::Color& color, SoundTag soundTag) :
+	Block(name, sf::Texture("shroom_block.png"), size, position, color, soundTag) {
 	points = 40;
 	shape->setTexture(&texture);
 
@@ -16,6 +16,7 @@ ShroomBlock::ShroomBlock(const std::string& name, const sf::Vector2f& size, cons
 
 void ShroomBlock::onCollision(const sf::Vector2f& normal, const Entity& collidingObj) {
 	if (collidingObj.tag == utils::EntityTag::Ball) {
+		Audio::getInstance().play(soundTag);
 		Score::getInstance().updateScore(points);
 		isAlive = false;
 	}

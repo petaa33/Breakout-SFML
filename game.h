@@ -4,6 +4,7 @@
 #include "entityManager.h"
 #include "health.h"
 #include "vector"
+#include "audio.h"
 
 struct Gap {
 	bool gapFound;

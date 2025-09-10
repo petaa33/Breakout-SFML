@@ -98,14 +98,14 @@ void EntityManager::createBlocks(int windowWidth, int windowHeight) {
 
 			switch (it->tag)
 			{
-			case BlockTag::HARD: block = std::make_shared<HardBlock>(name, size, position, color);
+			case BlockTag::HARD: block = std::make_shared<HardBlock>(name, size, position, color, static_cast<SoundTag>(j));
 				break;
-			case BlockTag::OIL: block = std::make_shared<OilBlock>(name, size, position, color);
+			case BlockTag::OIL: block = std::make_shared<OilBlock>(name, size, position, color, static_cast<SoundTag>(j));
 				break;
-			case BlockTag::SHROOM: block = std::make_shared<ShroomBlock>(name, size, position, color);
+			case BlockTag::SHROOM: block = std::make_shared<ShroomBlock>(name, size, position, color, static_cast<SoundTag>(j));
 				break;
 			default:
-				block = std::make_shared<PlainBlock>(name, size, position, color);
+				block = std::make_shared<PlainBlock>(name, size, position, color, static_cast<SoundTag>(j));
 				break;
 			}
 

@@ -4,7 +4,7 @@
 class ShroomBlock : public Block {
 public:
 	void onCollision(const sf::Vector2f& normal, const Entity& collidingObj) override;
-	ShroomBlock(const std::string& name, const sf::Vector2f& size, const sf::Vector2f& position, const sf::Color& color);
+	ShroomBlock(const std::string& name, const sf::Vector2f& size, const sf::Vector2f& position, const sf::Color& color, SoundTag soundTag);
 };
 
 class Shroom : public Entity {

@@ -2,6 +2,7 @@
 #include "barrier.h"
 #include "SFML/Graphics.hpp"
 #include "utils.hpp"
+#include "audio.h"
 
 int Barrier::windowWidth = 0;
 int Barrier::windowHeight = 0;
@@ -41,4 +42,8 @@ Barrier::Barrier(Bound bound) {
 	shape->setOrigin(origin);
 	shape->setPosition(position);
 	shape->setFillColor(sf::Color::Green);
+}
+
+void Barrier::onCollision(const sf::Vector2f& normal, const Entity& collidingObj) {
+	Audio::getInstance().play(SoundTag::BarrierHit);
 }
