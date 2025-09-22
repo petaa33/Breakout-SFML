@@ -28,7 +28,7 @@ void Game::run() {
 	removeOutOfBounds();
 	systemModifiers();
 	systemMovement();
-	sytemCollison();
+	systemCollison();
 	systemRender();
 	entityManager.update();
 }
@@ -46,10 +46,6 @@ void Game::systemRender() {
 
 	window.draw(Score::getInstance().getText());
 	window.display();
-}
-
-void Game::sytemCollison() {
-	handleCollisionBroadPhase();
 }
 
 void Game::systemMovement() {
@@ -100,10 +96,9 @@ void Game::handleGamePhase() {
 	}
 }
 
-void Game::handleCollisionBroadPhase() {
+void Game::systemCollison() {
 	for (auto e : entityManager.getEntities(utils::EntityTag::Rigidbody)) {
 		if (const auto& entity = e.lock()) {
-
 			handleCollision(*entity, entityManager.getEntities(utils::EntityTag::Block));
 			handleCollision(*entity, entityManager.getEntities(utils::EntityTag::Barrier));
 			handleCollision(*entity, entityManager.getEntities(utils::EntityTag::Rigidbody));
